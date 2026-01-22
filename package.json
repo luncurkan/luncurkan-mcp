@@ -55,6 +55,9 @@
     "url": "https://github.com/luncurkan/mcp/issues"
   },
   "homepage": "https://luncurkan.dev",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "lint-staged": {
     "*.ts": [
       "eslint --fix",
