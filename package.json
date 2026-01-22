@@ -49,10 +49,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luncurkan/mcp.git"
+    "url": "git+https://github.com/luncurkan/luncurkan-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/luncurkan/mcp/issues"
+    "url": "https://github.com/luncurkan/luncurkan-mcp/issues"
   },
   "homepage": "https://luncurkan.dev",
   "lint-staged": {
