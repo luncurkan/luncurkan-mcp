@@ -155,6 +155,21 @@ export const deploymentTools: Tool[] = [
       required: ['deployment_id'],
     },
   },
+  {
+    name: 'delete_deployment',
+    description:
+      'Delete a deployment. This will stop the running deployment and free up resources. This action cannot be undone.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        deployment_id: {
+          type: 'string',
+          description: 'The deployment ID to delete',
+        },
+      },
+      required: ['deployment_id'],
+    },
+  },
 ];
 
 export async function handleDeploymentTool(
@@ -356,6 +371,15 @@ export async function handleDeploymentTool(
       return {
         deployment_id: deploymentId,
         logs,
+      };
+    }
+
+    case 'delete_deployment': {
+      const deploymentId = args['deployment_id'] as string;
+      await client.deleteDeployment(deploymentId);
+      return {
+        message: 'Deployment deleted successfully',
+        deployment_id: deploymentId,
       };
     }
 

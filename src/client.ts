@@ -233,6 +233,11 @@ export class LuncurkanClient {
     return response.logs;
   }
 
+  /** Delete a deployment */
+  async deleteDeployment(deploymentId: string): Promise<void> {
+    await this.request<void>('DELETE', `/api/deployments/${deploymentId}`);
+  }
+
   /**
    * @section Organizations
    * Organization management methods
