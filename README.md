@@ -13,21 +13,6 @@ MCP (Model Context Protocol) server for [luncurkan.dev](https://luncurkan.dev) -
 
 ## Installation
 
-This package is published to GitHub Packages.
-
-### 1. Configure npm registry
-
-Create or edit `~/.npmrc` to add:
-
-```
-@luncurkan:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
-```
-
-Replace `YOUR_GITHUB_TOKEN` with a [GitHub personal access token](https://github.com/settings/tokens) that has `read:packages` permission.
-
-### 2. Install the package
-
 ```bash
 npm install -g @luncurkan/mcp
 ```
