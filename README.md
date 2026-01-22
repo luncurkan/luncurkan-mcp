@@ -156,23 +156,106 @@ Once configured, you can ask Claude:
 - "List my organizations"
 - "Who are the members of my team org?"
 
-## Configuration File
+## Configuration File (`luncurkan.json`)
 
-You can add a `luncurkan.json` file to your repository root to configure deployments:
+Add a `luncurkan.json` file to your repository root to configure deployments. The MCP will automatically read this config when creating deployments.
+
+For full documentation, see: [luncurkan.dev/docs/configuration](https://luncurkan.dev/docs/configuration)
+
+### Structure
 
 ```json
 {
-  "build_command": "npm run build",
-  "start_command": "npm start",
-  "resources": {
-    "cpu": 250,
-    "memory": 256
+  "builder": {
+    "lang": "node",
+    "version": "20",
+    "command": "npm start",
+    "env": { "NODE_ENV": "production" }
   },
-  "environment_variables": {
-    "NODE_ENV": "production"
+  "vars": {
+    "LOG_LEVEL": "info"
+  },
+  "resources": {
+    "cpu": 100,
+    "memory": 256
   }
 }
 ```
+
+### Builder Options
+
+| Field     | Description                      | Example                               |
+|-----------|----------------------------------|---------------------------------------|
+| `lang`    | Programming language             | `node`, `bun`, `go`, `rust`, `python` |
+| `version` | Runtime version                  | `20`, `1.22`, `3.12`                  |
+| `command` | Command to start application     | `npm start`, `./server`               |
+| `env`     | Environment variables at build   | `{ "NODE_ENV": "production" }`        |
+
+### Resources
+
+| Field    | Description                           | Default |
+|----------|---------------------------------------|---------|
+| `cpu`    | CPU in millicores (100 = 0.1 vCPU)    | `100`   |
+| `memory` | Memory in MiB                         | `256`   |
+
+### Supported Languages
+
+| Language | Identifier | Versions       |
+|----------|------------|----------------|
+| Node.js  | `node`     | 18, 20, 22     |
+| Bun      | `bun`      | 1.0, 1.1       |
+| Go       | `go`       | 1.21, 1.22     |
+| Rust     | `rust`     | 1.75, 1.80     |
+| Python   | `python`   | 3.11, 3.12     |
+
+### Monorepo Support
+
+For monorepos with multiple apps, use the `apps` key:
+
+```json
+{
+  "apps": {
+    "apps/frontend": {
+      "builder": { "lang": "node", "version": "20", "command": "npm start" },
+      "resources": { "cpu": 100, "memory": 256 }
+    },
+    "apps/api": {
+      "builder": { "lang": "go", "version": "1.22", "command": "./server" },
+      "resources": { "cpu": 200, "memory": 512 }
+    }
+  }
+}
+```
+
+### Examples
+
+**Go API:**
+```json
+{
+  "builder": {
+    "lang": "go",
+    "version": "1.22",
+    "command": "./main"
+  },
+  "vars": { "GIN_MODE": "release" },
+  "resources": { "cpu": 100, "memory": 256 }
+}
+```
+
+**Python FastAPI:**
+```json
+{
+  "builder": {
+    "lang": "python",
+    "version": "3.12",
+    "command": "uvicorn main:app --host 0.0.0.0 --port 3000"
+  },
+  "vars": { "ENVIRONMENT": "production" },
+  "resources": { "cpu": 200, "memory": 512 }
+}
+```
+
+> **Important:** Your application must listen on port `3000`. Luncurkan exposes your app through this port.
 
 ## Environment Variables
 
