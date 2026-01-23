@@ -128,13 +128,33 @@ export const deploymentTools: Tool[] = [
   {
     name: 'redeploy',
     description:
-      'Redeploy an existing deployment with the same configuration. Useful for retrying failed deployments or updating to latest code.',
+      'Redeploy an existing deployment. Can optionally adjust resources and dependencies. Useful for retrying failed deployments, updating to latest code, or scaling resources.',
     inputSchema: {
       type: 'object' as const,
       properties: {
         deployment_id: {
           type: 'string',
           description: 'The deployment ID to redeploy',
+        },
+        resources: {
+          type: 'object',
+          description:
+            'Optional resource adjustment (e.g., {"cpu": 100, "memory": 128})',
+          properties: {
+            cpu: {
+              type: 'number',
+              description: 'CPU in millicores (e.g., 100 = 0.1 vCPU)',
+            },
+            memory: {
+              type: 'number',
+              description: 'Memory in MiB (e.g., 128)',
+            },
+          },
+        },
+        branch: {
+          type: 'string',
+          description:
+            'Optional git branch to deploy from (default: current branch)',
         },
       },
       required: ['deployment_id'],
@@ -355,11 +375,28 @@ export async function handleDeploymentTool(
 
     case 'redeploy': {
       const deploymentId = args['deployment_id'] as string;
-      const result = await client.redeploy(deploymentId);
+      const resources = args['resources'] as
+        | { cpu: number; memory: number }
+        | undefined;
+      const branch = args['branch'] as string | undefined;
+
+      const options: {
+        resources?: { cpu: number; memory: number };
+        branch?: string;
+      } = {};
+      if (resources) options.resources = resources;
+      if (branch) options.branch = branch;
+
+      const result = await client.redeploy(
+        deploymentId,
+        Object.keys(options).length > 0 ? options : undefined
+      );
       return {
         message: result.message || 'Redeployment triggered successfully',
         deployment_id: result.deployment_id,
         stream_url: result.stream_url,
+        ...(resources && { resources }),
+        ...(branch && { branch }),
       };
     }
 
