@@ -22,6 +22,8 @@ import {
   handleOrganizationTool,
   testingTools,
   handleTestingTool,
+  quotaTools,
+  handleQuotaTool,
 } from './tools/index.js';
 
 // All available tools
@@ -30,6 +32,7 @@ const allTools = [
   ...deploymentTools,
   ...organizationTools,
   ...testingTools,
+  ...quotaTools,
 ];
 
 // Tool name to category mapping
@@ -37,6 +40,7 @@ const projectToolNames = new Set(projectTools.map((t) => t.name));
 const deploymentToolNames = new Set(deploymentTools.map((t) => t.name));
 const organizationToolNames = new Set(organizationTools.map((t) => t.name));
 const testingToolNames = new Set(testingTools.map((t) => t.name));
+const quotaToolNames = new Set(quotaTools.map((t) => t.name));
 
 /**
  * Handle a tool call by routing to the appropriate handler
@@ -60,6 +64,10 @@ async function handleToolCall(
 
   if (testingToolNames.has(name)) {
     return handleTestingTool(client, name, args);
+  }
+
+  if (quotaToolNames.has(name)) {
+    return handleQuotaTool(client, name, args);
   }
 
   throw new Error(`Unknown tool: ${name}`);

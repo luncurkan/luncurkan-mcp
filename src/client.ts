@@ -239,6 +239,21 @@ export class LuncurkanClient {
   }
 
   /**
+   * @section Quota
+   * Quota and usage methods
+   */
+
+  /** Get current user's quota information */
+  async getQuota(): Promise<{
+    userLimits: { service_cpu: number; service_memory_mb: number };
+    userUsage: { used_service_cpu: number; used_service_memory_mb: number };
+    userRemaining: { service_cpu: number; service_memory_mb: number };
+    effectiveRemaining: { service_cpu: number; service_memory_mb: number };
+  }> {
+    return this.request('GET', '/api/quota');
+  }
+
+  /**
    * @section Organizations
    * Organization management methods
    */
