@@ -216,12 +216,13 @@ export class LuncurkanClient {
   }
 
   /** Redeploy an existing deployment */
-  async redeploy(deploymentId: string): Promise<Deployment> {
-    const response = await this.request<{ deployment: Deployment }>(
-      'POST',
-      `/api/deployments/${deploymentId}/redeploy`
-    );
-    return response.deployment;
+  async redeploy(deploymentId: string): Promise<{
+    success: boolean;
+    deployment_id: string;
+    stream_url: string;
+    message: string;
+  }> {
+    return this.request('POST', `/api/deployments/${deploymentId}/redeploy`);
   }
 
   /** Get deployment logs */

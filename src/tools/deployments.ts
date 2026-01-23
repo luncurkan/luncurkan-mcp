@@ -355,13 +355,11 @@ export async function handleDeploymentTool(
 
     case 'redeploy': {
       const deploymentId = args['deployment_id'] as string;
-      const deployment = await client.redeploy(deploymentId);
+      const result = await client.redeploy(deploymentId);
       return {
-        message: `Redeployment triggered successfully`,
-        deployment: {
-          id: deployment.id,
-          status: deployment.status,
-        },
+        message: result.message || 'Redeployment triggered successfully',
+        deployment_id: result.deployment_id,
+        stream_url: result.stream_url,
       };
     }
 
