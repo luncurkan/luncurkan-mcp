@@ -221,6 +221,7 @@ export class LuncurkanClient {
     options?: {
       resources?: { cpu: number; memory: number };
       branch?: string;
+      environment_variables?: Record<string, string>;
     }
   ): Promise<{
     success: boolean;

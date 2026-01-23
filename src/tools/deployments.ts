@@ -156,6 +156,12 @@ export const deploymentTools: Tool[] = [
           description:
             'Optional git branch to deploy from (default: current branch)',
         },
+        environment_variables: {
+          type: 'object',
+          description:
+            'Optional environment variables to add/update (e.g., {"NODE_ENV": "production", "LOG_LEVEL": "debug"})',
+          additionalProperties: { type: 'string' },
+        },
       },
       required: ['deployment_id'],
     },
@@ -379,13 +385,18 @@ export async function handleDeploymentTool(
         | { cpu: number; memory: number }
         | undefined;
       const branch = args['branch'] as string | undefined;
+      const envVars = args['environment_variables'] as
+        | Record<string, string>
+        | undefined;
 
       const options: {
         resources?: { cpu: number; memory: number };
         branch?: string;
+        environment_variables?: Record<string, string>;
       } = {};
       if (resources) options.resources = resources;
       if (branch) options.branch = branch;
+      if (envVars) options.environment_variables = envVars;
 
       const result = await client.redeploy(
         deploymentId,
@@ -397,6 +408,7 @@ export async function handleDeploymentTool(
         stream_url: result.stream_url,
         ...(resources && { resources }),
         ...(branch && { branch }),
+        ...(envVars && { environment_variables: envVars }),
       };
     }
 
