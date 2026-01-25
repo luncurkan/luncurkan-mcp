@@ -307,7 +307,7 @@ export function createClientFromEnv(): LuncurkanClient {
   if (!token) {
     throw new Error(
       'LUNCURKAN_TOKEN environment variable is required. ' +
-        'Generate a token at https://console.luncurkan.dev/settings/tokens'
+        'Generate a token at https://console.luncurkan.dev/profile/api-tokens'
     );
   }
 
