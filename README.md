@@ -13,7 +13,7 @@ npx @luncurkan/mcp
 
 ## Setup
 
-1. Get your API token from [console.luncurkan.dev/settings/tokens](https://console.luncurkan.dev/settings/tokens)
+1. Get your API token from [console.luncurkan.dev/profile/api-tokens](https://console.luncurkan.dev/profile/api-tokens)
 
 2. Add to your MCP config:
 
